@@ -54,9 +54,7 @@ function playmariofunction(){
   document.getElementById("status").innerHTML= "Game is loading...";
 }
 function draw(){
-if(game_status == "start"){
-  move();
-}
+
  background(0); 
  if(wristscore>0.2){
    fill("red");
@@ -74,33 +72,36 @@ if(game_status == "start"){
  image(video, 0, 0, 700, 600);
  
 
-   //funtion paddleInCanvas call 
-   paddleInCanvas();
+   
+ if(game_status == "start"){
+  //funtion paddleInCanvas call 
+  paddleInCanvas();
  
-   //left paddle
-   fill(250,0,0);
-    stroke(0,0,250);
-    strokeWeight(0.5);
-   paddle1Y = wristy; 
-   rect(paddle1X,paddle1Y,paddle1,paddle1Height,100);
+  //left paddle
+  fill(250,0,0);
+   stroke(0,0,250);
+   strokeWeight(0.5);
+  paddle1Y = wristy; 
+  rect(paddle1X,paddle1Y,paddle1,paddle1Height,100);
+  
+  
+   //pc computer paddle
+   fill("#FFA500");
+   stroke("#FFA500");
+  var paddle2y =ball.y-paddle2Height/2;  rect(paddle2Y,paddle2y,paddle2,paddle2Height,100);
    
+   //function midline call
+   midline();
    
-    //pc computer paddle
-    fill("#FFA500");
-    stroke("#FFA500");
-   var paddle2y =ball.y-paddle2Height/2;  rect(paddle2Y,paddle2y,paddle2,paddle2Height,100);
-    
-    //function midline call
-    midline();
-    
-    //funtion drawScore call 
-   drawScore();
-   
-   //function models call  
-   models();
-   
-   //function move call which in very important
-   
+   //funtion drawScore call 
+  drawScore();
+  
+  //function models call  
+  models();
+  
+  //function move call which in very important
+  move();
+}
 }
 
 
