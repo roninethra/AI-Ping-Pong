@@ -1,6 +1,12 @@
-
+function preload() {
+ miss = loadSound("missed.wav");
+  touchedball= loadSound("ball_touch_paddel.wav");
+}
+game_status= ""
 /*created by prashant shukla */
-
+var wristX= 0;
+var wristy= 0;
+var wristscore= 0;
 var paddle2 =10,paddle1=10;
 
 var paddle1X = 10,paddle1Height = 110;
@@ -37,12 +43,26 @@ function modelloaded(){
 function gotPoses(results){
   if(results.length>0){
     console.log(results);
+    wristx= results[0].pose.rightWrist.x;
+    wristy= results[0].pose.rightWrist.y;
+    wristscore= results[0].pose.keypoints[10].score;
+    console.log(wristscore);
   }
 }
+function playmariofunction(){
+  game_status= "start";
+  document.getElementById("status").innerHTML= "Game is loading...";
+}
 function draw(){
-
+if(game_status == "start"){
+  move();
+}
  background(0); 
- 
+ if(wristscore>0.2){
+   fill("red");
+   stroke("red");
+   circle(wristx,wristy,25);
+ }
 
  fill("black");
  stroke("black");
@@ -53,6 +73,7 @@ function draw(){
  rect(0,0,20,700);
  image(video, 0, 0, 700, 600);
  
+
    //funtion paddleInCanvas call 
    paddleInCanvas();
  
@@ -60,7 +81,7 @@ function draw(){
    fill(250,0,0);
     stroke(0,0,250);
     strokeWeight(0.5);
-   paddle1Y = mouseY; 
+   paddle1Y = wristy; 
    rect(paddle1X,paddle1Y,paddle1,paddle1Height,100);
    
    
@@ -79,7 +100,7 @@ function draw(){
    models();
    
    //function move call which in very important
-    move();
+   
 }
 
 
@@ -132,11 +153,13 @@ function move(){
   if (ball.x-2.5*ball.r/2< 0){
   if (ball.y >= paddle1Y&& ball.y <= paddle1Y + paddle1Height) {
     ball.dx = -ball.dx+0.5; 
+    touchedball.play();
   }
   else{
     pcscore++;
     reset();
     navigator.vibrate(100);
+  miss.play();
   }
 }
 if(pcscore ==4){
@@ -147,13 +170,20 @@ if(pcscore ==4){
     stroke("white");
     textSize(25)
     text("Game Over!☹☹",width/2,height/2);
-    text("Reload The Page!",width/2,height/2+30)
+    text("Press the Restart Button to Play Again!",width/2,height/2+30)
     noLoop();
     pcscore = 0;
 }
    if(ball.y+ball.r > height || ball.y-ball.r <0){
        ball.dy =- ball.dy;
+       
    }   
+}
+
+function restart(){
+  pcscore= 0;
+  playerscore= 0;
+  loop();
 }
 
 
